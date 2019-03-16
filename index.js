@@ -1,13 +1,19 @@
+const _ = require('lodash')
 
 function upgradeConfig(config) {
   return {
     ...config.options,
     theme: extractThemeProperties(config),
+    variants: extractVariantsProperties(config),
   }
 }
 
 function extractThemeProperties({ options, modules, plugins, ...theme }) {
   return updateThemePropertyNames(theme)
+}
+
+function extractVariantsProperties({ modules }) {
+  return updateVariantsPropertyNames(modules)
 }
 
 function updateThemePropertyNames(theme) {
@@ -42,5 +48,78 @@ function updateThemePropertyNames(theme) {
     stroke: theme.svgStroke,
   }
 }
+
+function updateVariantsPropertyNames(modules) {
+  const propertyMap = {
+    appearance: ['appearance'],
+    backgroundAttachment: ['backgroundAttachment'],
+    backgroundColors: ['backgroundColor'],
+    backgroundPosition: ['backgroundPosition'],
+    backgroundRepeat: ['backgroundRepeat'],
+    backgroundSize: ['backgroundSize'],
+    borderCollapse: ['borderCollapse'],
+    borderColors: ['borderColor'],
+    borderRadius: ['borderRadius'],
+    borderStyle: ['borderStyle'],
+    borderWidths: ['borderWidth'],
+    cursor: ['cursor'],
+    display: ['display'],
+    flexbox: [
+      'flexDirection',
+      'flexWrap',
+      'alignItems',
+      'alignSelf',
+      'justifyContent',
+      'alignContent',
+      'flex',
+      'flexGrow',
+      'flexShrink',
+    ],
+    float: ['float'],
+    fonts: ['fontFamily'],
+    fontWeights: ['fontWeight'],
+    height: ['height'],
+    leading: ['lineHeight'],
+    lists: ['listStylePosition', 'listStyleType'],
+    margin: ['margin'],
+    maxHeight: ['maxHeight'],
+    maxWidth: ['maxWidth'],
+    minHeight: ['minHeight'],
+    minWidth: ['minWidth'],
+    negativeMargin: ['negativeMargin'],
+    objectFit: ['objectFit'],
+    objectPosition: ['objectPosition'],
+    opacity: ['opacity'],
+    outline: ['outline'],
+    overflow: ['overflow'],
+    padding: ['padding'],
+    pointerEvents: ['pointerEvents'],
+    position: ['position', 'inset'],
+    resize: ['resize'],
+    shadows: ['boxShadow'],
+    svgFill: ['fill'],
+    svgStroke: ['stroke'],
+    tableLayout: ['tableLayout'],
+    textAlign: ['textAlign'],
+    textColors: ['textColor'],
+    textSizes: ['fontSize'],
+    textStyle: ['fontStyle', 'textTransform', 'textDecoration', 'fontSmoothing'],
+    tracking: ['letterSpacing'],
+    userSelect: ['userSelect'],
+    verticalAlign: ['verticalAlign'],
+    visibility: ['visibility'],
+    whitespace: ['whitespace', 'wordBreak'],
+    width: ['width'],
+    zIndex: ['zIndex'],
+  }
+
+  return _(propertyMap).flatMap((value, key) => {
+    return value.map(newKey => {
+      return [newKey, modules[key]]
+    })
+  }).fromPairs().value()
+}
+
+
 
 module.exports = upgradeConfig
