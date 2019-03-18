@@ -49,7 +49,7 @@ module.exports = {
     screen: '100vh',
   },
   minWidth: {
-    0: '0',
+    '0': '0',
   },
   minHeight: {
     full: '100%',
@@ -61,22 +61,22 @@ module.exports = {
     screen: '100vh',
   },
   padding: {
-    4: '1rem',
+    '4': '1rem',
   },
   margin: {
-    8: '2rem',
+    '8': '2rem',
   },
   negativeMargin: {
-    2: '.5rem',
+    '2': '.5rem',
   },
   shadows: {
     inner: 'inset 0 2px 4px 0 rgba(0,0,0,0.06)',
   },
   zIndex: {
-    20: 20,
+    '20': 20,
   },
   opacity: {
-    50: '.5',
+    '50': '.5',
   },
   svgFill: {
     current: 'currentColor',
