@@ -71,7 +71,6 @@ function upgradeThemeProperties({ options, modules, plugins, ...theme }, contain
     letterSpacing: theme.tracking,
     textColor: theme.textColors,
     backgroundColor: theme.backgroundColors,
-    backgroundPosition: theme.backgroundPosition,
     backgroundSize: theme.backgroundSize,
     borderWidth: theme.borderWidths,
     borderColor: theme.borderColors,
@@ -174,7 +173,8 @@ function buildPluginsSection(configFileContents) {
   const objectOptionsPattern = /^(\s+)require\(\s*'tailwindcss\/plugins\/container'\s*\)\s*\(\s*{(.*?)\1\}\),?/ms
 
   if (objectOptionsPattern.test(pluginsContents)) {
-    const containerOptions = eval(`({ ${pluginsContents.match(objectOptionsPattern)[2]} })`)
+    // console.log(pluginsContents.match(objectOptionsPattern)[2])
+    const containerOptions = eval(`({\n${pluginsContents.match(objectOptionsPattern)[2]}\n})`)
     pluginsContents = pluginsContents.replace(objectOptionsPattern, '')
     return [`[${pluginsContents}]`, containerOptions]
   }
