@@ -15,33 +15,53 @@ module.exports = {
   separator: %%SEPARATOR%%,
   theme: %%THEME%%,
   variants: %%VARIANTS%%,
+  plugins: %%PLUGINS%%,
 }
 `
 
 function upgradeConfig(configPath) {
   const config = require(path.resolve(configPath))
+  const configFileContents = fs.readFileSync(path.resolve(configPath), 'utf8')
 
-  return configTemplate
-    .replace('%%PREFIX%%', `'${config.options.prefix}'`)
-    .replace('%%IMPORTANT%%', `${config.options.important}`)
-    .replace('%%SEPARATOR%%', `'${config.options.separator}'`)
-    .replace('%%THEME%%', stringify(upgradeThemeProperties(config)))
-    .replace('%%VARIANTS%%', stringify(upgradeVariantsProperties(config)))
-
-
-  return addPluginSection(partiallyUpgraded, configPath)
+  return _.flow([
+    addOptionsSections(config),
+    addPluginsSection(configFileContents),
+    addThemeSection(config),
+    addVariantsSection(config),
+  ])(configTemplate)
 }
 
-// function addPluginSection(config, configPath) {
-//   return {
-//     ...config,
-//     plugins: [
-//     ]
-//   }
-// }
+function addOptionsSections(config) {
+  return configTemplate => {
+    return configTemplate
+      .replace('%%PREFIX%%', `'${config.options.prefix}'`)
+      .replace('%%IMPORTANT%%', `${config.options.important}`)
+      .replace('%%SEPARATOR%%', `'${config.options.separator}'`)
+  }
+}
 
-function upgradeThemeProperties({ options, modules, plugins, ...theme }) {
+function addThemeSection(config) {
+  return ([configTemplate, containerOptions]) => {
+    return configTemplate.replace('%%THEME%%', stringify(upgradeThemeProperties(config, containerOptions)))
+  }
+}
+
+function addVariantsSection(config) {
+  return configTemplate => {
+    return configTemplate.replace('%%VARIANTS%%', stringify(upgradeVariantsProperties(config)))
+  }
+}
+
+function addPluginsSection(configFileContents) {
+  return configTemplate => {
+    const [updatedTemplate, containerOptions] = buildPluginsSection(configFileContents)
+    return [configTemplate.replace('%%PLUGINS%%', updatedTemplate), containerOptions]
+  }
+}
+
+function upgradeThemeProperties({ options, modules, plugins, ...theme }, containerOptions) {
   return {
+    ..._.isEmpty(containerOptions) ? {} : { container: containerOptions },
     colors: theme.colors,
     screens: theme.screens,
     fontFamily: theme.fonts,
@@ -144,6 +164,22 @@ function upgradeVariantsProperties({ modules }) {
   }).fromPairs().value()
 }
 
+function buildPluginsSection(configFileContents) {
+  let pluginsContents = configFileContents.match(/^(\s+)plugins:\s+\[(.*?)^\1]/ms)[2]
 
+  if (!/require\(\s*'tailwindcss\/plugins\/container'\s*\)/.test(pluginsContents)) {
+    return [`[${pluginsContents}]`, {}]
+  }
+
+  const objectOptionsPattern = /^(\s+)require\(\s*'tailwindcss\/plugins\/container'\s*\)\s*\(\s*{(.*?)\1\}\),?/ms
+
+  if (objectOptionsPattern.test(pluginsContents)) {
+    const containerOptions = eval(`({ ${pluginsContents.match(objectOptionsPattern)[2]} })`)
+    pluginsContents = pluginsContents.replace(objectOptionsPattern, '')
+    return [`[${pluginsContents}]`, containerOptions]
+  }
+
+  // TODO: Handle weird non-object literal arguments (require(my-stupid-container-options)?)
+}
 
 module.exports = upgradeConfig
