@@ -137,10 +137,12 @@ module.exports = {
     zIndex: ['responsive'],
   },
   plugins: [
+    function () {},
     require('tailwindcss/plugins/container')({
-      // center: true,
-      // padding: '1rem',
+      center: true,
+      padding: '1rem',
     }),
+    function () {},
   ],
   options: {
     prefix: 'tw-',

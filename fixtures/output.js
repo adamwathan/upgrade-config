@@ -3,6 +3,7 @@ module.exports = {
   important: true,
   separator: '__',
   theme: {
+    container: { center: true, padding: '1rem' },
     colors: { red: '#ff0000' },
     screens: { sm: '400px' },
     fontFamily: { sans: ['Arial'] },
@@ -99,9 +100,7 @@ module.exports = {
     zIndex: ['responsive'],
   },
   plugins: [
-    require('tailwindcss/plugins/container')({
-      // center: true,
-      // padding: '1rem',
-    }),
+    function () {},
+    function () {},
   ],
 }
