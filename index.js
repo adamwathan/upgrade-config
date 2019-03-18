@@ -1,23 +1,44 @@
 const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
+const stringifyObject = require('stringify-object')
+
+const stringify = s => stringifyObject(s, {
+  indent: '  ',
+  inlineCharacterLimit: 100,
+})
+
+const configTemplate = `
+module.exports = {
+  prefix: %%PREFIX%%,
+  important: %%IMPORTANT%%,
+  separator: %%SEPARATOR%%,
+  theme: %%THEME%%,
+  variants: %%VARIANTS%%,
+}
+`
 
 function upgradeConfig(configPath) {
   const config = require(path.resolve(configPath))
 
-  const partiallyUpgraded = {
-    ...config.options,
-    theme: upgradeThemeProperties(config),
-    variants: upgradeVariantsProperties(config),
-  }
+  return configTemplate
+    .replace('%%PREFIX%%', `'${config.options.prefix}'`)
+    .replace('%%IMPORTANT%%', `${config.options.important}`)
+    .replace('%%SEPARATOR%%', `'${config.options.separator}'`)
+    .replace('%%THEME%%', stringify(upgradeThemeProperties(config)))
+    .replace('%%VARIANTS%%', stringify(upgradeVariantsProperties(config)))
 
-  const configFileContents = fs.readFileSync('./fixtures/input.js', 'utf8')
 
-  const pattern = /^  plugins:\s+\[(.*?)^  ]/ms
-
-  console.log(configFileContents.match(pattern))
-
+  return addPluginSection(partiallyUpgraded, configPath)
 }
+
+// function addPluginSection(config, configPath) {
+//   return {
+//     ...config,
+//     plugins: [
+//     ]
+//   }
+// }
 
 function upgradeThemeProperties({ options, modules, plugins, ...theme }) {
   return {
