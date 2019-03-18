@@ -26,9 +26,6 @@ module.exports = {
   backgroundColors: {
     red: '#ff0000'
   },
-  backgroundPosition: {
-    center: 'center'
-  },
   backgroundSize: {
     auto: 'auto'
   },

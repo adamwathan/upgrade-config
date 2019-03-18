@@ -13,7 +13,6 @@ module.exports = {
     letterSpacing: { normal: 0 },
     textColor: { red: '#ff0000' },
     backgroundColor: { red: '#ff0000' },
-    backgroundPosition: { center: 'center' },
     backgroundSize: { auto: 'auto' },
     borderWidth: { default: '1px' },
     borderColor: { default: '#ff0000', red: '#ff0000' },
