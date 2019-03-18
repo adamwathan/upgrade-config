@@ -1,22 +1,25 @@
+const fs = require('fs')
+const path = require('path')
 const _ = require('lodash')
 
-function upgradeConfig(config) {
-  return {
+function upgradeConfig(configPath) {
+  const config = require(path.resolve(configPath))
+
+  const partiallyUpgraded = {
     ...config.options,
-    theme: extractThemeProperties(config),
-    variants: extractVariantsProperties(config),
+    theme: upgradeThemeProperties(config),
+    variants: upgradeVariantsProperties(config),
   }
+
+  const configFileContents = fs.readFileSync('./fixtures/input.js', 'utf8')
+
+  const pattern = /^  plugins:\s+\[(.*?)^  ]/ms
+
+  console.log(configFileContents.match(pattern))
+
 }
 
-function extractThemeProperties({ options, modules, plugins, ...theme }) {
-  return updateThemePropertyNames(theme)
-}
-
-function extractVariantsProperties({ modules }) {
-  return updateVariantsPropertyNames(modules)
-}
-
-function updateThemePropertyNames(theme) {
+function upgradeThemeProperties({ options, modules, plugins, ...theme }) {
   return {
     colors: theme.colors,
     screens: theme.screens,
@@ -49,7 +52,7 @@ function updateThemePropertyNames(theme) {
   }
 }
 
-function updateVariantsPropertyNames(modules) {
+function upgradeVariantsProperties({ modules }) {
   const propertyMap = {
     appearance: ['appearance'],
     backgroundAttachment: ['backgroundAttachment'],
