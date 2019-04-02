@@ -140,6 +140,7 @@ module.exports = {
     require(expression)(),
     require((function () { return 'some/weird/nested/require/callback' })())(),
     require('whatever/plugin/stuff')(),
+    require('not/immediately/invoked'),
     require('whatever/plugin/stuff')({ options: true}),
   ],
   options: {

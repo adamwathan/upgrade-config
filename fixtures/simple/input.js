@@ -21,7 +21,7 @@ module.exports = {
     normal: 0
   },
   textColors: {
-    red: '#ff0000'
+    special: '#c0107'
   },
   backgroundColors: {
     red: '#ff0000'
