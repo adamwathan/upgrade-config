@@ -1,5 +1,6 @@
 module.exports = {
     theme: {
+        colors: { transparent: 'transparent', black: '#000', white: '#fff' },
         width: {
             '1': '20%',
             '2': '40%',
@@ -58,6 +59,7 @@ module.exports = {
             '8': '2rem',
             '10': '2.5rem'
         },
+        extend: { backgroundColor: { 'grey-dark': '#666666'}, borderColor: { 'default': 'pink' } }
     },
     variants: {}
 }

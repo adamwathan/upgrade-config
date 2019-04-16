@@ -1,4 +1,22 @@
 module.exports = {
+  colors: {
+    transparent: 'transparent',
+    black: '#000',
+    white: '#fff',
+  },
+  backgroundColors: {
+    transparent: 'transparent',
+
+    black: '#000',
+    white: '#fff',
+    'grey-dark': '#666666'
+  },
+  borderColors: {
+    transparent: 'transparent',
+    black: '#000',
+    white: '#fff',
+    default: 'pink'
+  },
   width: {
     '50%': '50%',
     '25%': '25%',

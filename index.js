@@ -168,7 +168,8 @@ function updateThemePropertyNames(theme) {
         opacity: theme.opacity,
         fill: theme.svgFill,
         stroke: theme.svgStroke,
-        spacing: theme.spacing
+        spacing: theme.spacing,
+        extend: {}
     }, _.isUndefined)
 }
 

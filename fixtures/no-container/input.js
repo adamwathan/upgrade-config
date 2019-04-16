@@ -33,7 +33,6 @@ module.exports = {
     default: '1px'
   },
   borderColors: {
-    default: '#ff0000',
     red: '#ff0000',
   },
   borderRadius: {
