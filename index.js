@@ -59,7 +59,7 @@ function upgradeConfig(configPath) {
 
     config = mapValuesDeep(config)
 
-    // TODO: remap to new tailwindcss options
+    // remap to new tailwindcss options
     config = {
         ...config.options,
         theme: extractThemeProperties(config),
