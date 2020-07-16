@@ -13,7 +13,7 @@
     "tailwindcss": "^0.7.4"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "prettier": "^1.16.4",
     "stringify-object": "^3.3.0"
   }
